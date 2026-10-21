@@ -1,0 +1,29 @@
+name: Matrix Demo
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - '.github/workflows/matrix-demo.yml'
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }} en ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [18, 20, 22]
+        exclude:
+          - os: windows-latest
+            node: 18
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Mostrar versiones
+        run: node --version
